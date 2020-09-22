@@ -6,10 +6,8 @@ class Surgery < ApplicationRecord
   has_many :doctor_surgeries
   has_many :doctors, through: :doctor_surgeries
 
-  def same_day_surgeries
-    # require "pry"; binding.pry
-    # Surgery.all.pluck(:weekday)
-    # Surgery.all.group(:title, :weekday)
+  def same_day_surgeries(weekday)
+    Surgery.where(weekday: weekday).pluck(:title)
   end
 
 end

@@ -33,7 +33,7 @@ RSpec.describe "Surgery Show Page" do
     DoctorSurgery.create(doctor_id: @mcdreamy.id, surgery_id: @appendectomy.id)
   end
 
-  it "displays the surgery titles along with the doctors performing the surgeries" do
+  it "displays the surgery title along with ORs" do
 
     visit "/surgeries"
 
@@ -50,6 +50,21 @@ RSpec.describe "Surgery Show Page" do
       expect(page).to have_content(@tonsillectomy.title)
       expect(page).to_not have_content(@hysteroscopy.title)
     end
+  end
+
+  it "add a doctor to a surgery" do
+    visit "/surgeries/#{@tonsillectomy.id}"
+
+    expect(page).to have_content "Add a Doctor to this Surgery"
+
+    new_doctor = @hospital1.doctors.create!(name: "Meredith Grey", specialty: "General Surgery", university: "Harvard University")
+
+    fill_in :name, with: "#{new_doctor.name}"
+
+    click_on "Submit"
+
+    expect(current_path).to eq("/surgeries/#{@tonsillectomy.id}")
+    # expect(page).to have_content("Meredith Grey")
   end
 
 end
