@@ -1,0 +1,12 @@
+<h1> <%= @surgery.title %> </h1>
+
+<h3> Operating Room to be used: <%= @surgery.o_r %> </h3>
+
+<section class='same-day-surgeries'>
+  <h3> Other surgeries happening this day of the week: </h3>
+  <% @surgery.same_day_surgeries.each do |surgery| %>
+  <ul>
+    <li> surgery.name </li>
+  </ul>
+  <% end %>
+</section>

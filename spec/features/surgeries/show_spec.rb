@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "Surgery Index Page" do
+RSpec.describe "Surgery Show Page" do
 
   before(:each) do
     # Hospitals:
@@ -16,8 +16,8 @@ RSpec.describe "Surgery Index Page" do
     # Surgeries:
     @appendectomy = Surgery.create!(title: "Appendectomy", weekday: "Monday", o_r: 1)
     @cholecystectomy = Surgery.create!(title: "Cholecystectomy", weekday: "Tuesday", o_r: 2)
-    @hysteroscopy = Surgery.create!(title: "Hysteroscopy", weekday: "Wednesday", o_r: 3)
-    @tonsillectomy = Surgery.create!(title: "Tonsillectomy", weekday: "Monday", o_r: 1)
+    @hysteroscopy = Surgery.create!(title: "Hysteroscopy", weekday: "Wednesday", o_r: 1)
+    @tonsillectomy = Surgery.create!(title: "Tonsillectomy", weekday: "Monday", o_r: 3)
 
     # DoctorSurgeries:
     DoctorSurgery.create(doctor_id: @meredith.id, surgery_id: @appendectomy.id)
@@ -38,28 +38,18 @@ RSpec.describe "Surgery Index Page" do
     visit "/surgeries"
 
     within "#surgery-#{@appendectomy.id}" do
-      expect(page).to have_content("Surgery: #{@appendectomy.title}")
-      expect(page).to have_content(@meredith.name)
-      expect(page).to have_content(@mcdreamy.name)
+      click_link "#{@appendectomy.title}"
     end
 
-    within "#surgery-#{@cholecystectomy.id}" do
-      expect(page).to have_content("Surgery: #{@cholecystectomy.title}")
-      expect(page).to have_content(@meredith.name)
-      expect(page).to have_content(@karev.name)
-    end
+    expect(current_path).to eq("/surgeries/#{@appendectomy.id}")
+    expect(page).to have_content(@appendectomy.title)
+    expect(page).to have_content("Operating Room to be used: #{@appendectomy.o_r}")
 
-    within "#surgery-#{@hysteroscopy.id}" do
-      expect(page).to have_content("Surgery: #{@hysteroscopy.title}")
-      expect(page).to have_content(@karev.name)
-      expect(page).to have_content(@bailey.name)
-    end
-
-    within "#surgery-#{@tonsillectomy.id}" do
-      expect(page).to have_content("Surgery: #{@tonsillectomy.title}")
-      expect(page).to have_content(@bailey.name)
-      expect(page).to have_content(@mcdreamy.name)
+    within '.same-day-surgeries' do
+      expect(page).to have_content("Other surgeries happening this day of the week:")
+      expect(page).to have_content(@tonsillectomy.title)
+      expect(page).to_not have_content(@hysteroscopy.title)
     end
   end
-  
+
 end
