@@ -10,9 +10,45 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 0) do
+ActiveRecord::Schema.define(version: 2020_09_22_152323) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
+  create_table "doctor_surgeries", force: :cascade do |t|
+    t.bigint "doctor_id"
+    t.bigint "surgery_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["doctor_id"], name: "index_doctor_surgeries_on_doctor_id"
+    t.index ["surgery_id"], name: "index_doctor_surgeries_on_surgery_id"
+  end
+
+  create_table "doctors", force: :cascade do |t|
+    t.string "name"
+    t.string "specialty"
+    t.string "university"
+    t.bigint "hospital_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["hospital_id"], name: "index_doctors_on_hospital_id"
+  end
+
+  create_table "hospitals", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "surgeries", force: :cascade do |t|
+    t.string "title"
+    t.string "weekday"
+    t.integer "o_r"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  add_foreign_key "doctor_surgeries", "doctors"
+  add_foreign_key "doctor_surgeries", "surgeries"
+  add_foreign_key "doctors", "hospitals"
 end
