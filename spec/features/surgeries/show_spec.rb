@@ -63,6 +63,8 @@ RSpec.describe "Surgery Show Page" do
 
     click_on "Submit"
 
+    new_doctor.last
+    
     expect(current_path).to eq("/surgeries/#{@tonsillectomy.id}")
     # expect(page).to have_content("Meredith Grey")
   end
